@@ -3,7 +3,7 @@
 Snow & Fire is a Canadian property-service operating system. The first products are residential/commercial snow removal and firewood sales. The architecture is service-agnostic so landscaping, tree work, and other property services can be added later without rewriting customers, properties, jobs, photos, or payments.
 
 **Product name:** Snow & Fire  
-**Consumer brand:** SnowFire Online (provided logo)  
+**Consumer brand:** SnowFire.ca (provided logo)  
 **Repository:** [QuietAgencyDev/snowfire](https://github.com/QuietAgencyDev/snowfire)
 
 ---
@@ -23,7 +23,7 @@ Inspected `C:\Users\user\.cursor\snowfire` on 2026-09-07.
 | Routes | None |
 | Styling | None |
 | Git | Empty `main`, remote `origin` → `https://github.com/QuietAgencyDev/snowfire.git` |
-| Brand asset | SnowFire Online logo supplied; not yet in the repo |
+| Brand asset | SnowFire.ca logo supplied; not yet in the repo |
 
 **Conflicts with this architecture:** none. This is a greenfield repository. Nothing to preserve or migrate.
 
@@ -38,7 +38,7 @@ Inspected `C:\Users\user\.cursor\snowfire` on 2026-09-07.
 5. Default timezone is `America/Toronto` until settings exist per business.
 6. Email/password via Supabase Auth is the first auth method. Magic links and SMS can be added later.
 7. Maps and weather are abstracted behind interfaces. No provider is wired until API keys exist.
-8. The cartoon SnowFire Online mark is the official logo. Surrounding UI stays dark charcoal, ice neutrals, and restrained fire accents — not clip-art chrome around the mark.
+8. The cartoon SnowFire.ca mark is the official logo. Surrounding UI stays dark charcoal, ice neutrals, and restrained fire accents — not clip-art chrome around the mark.
 9. Crew offline-first is designed in (queued writes, cached jobs) but not fully implemented in Phase 1.
 
 ---

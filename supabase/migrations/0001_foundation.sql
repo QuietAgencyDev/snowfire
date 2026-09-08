@@ -76,35 +76,7 @@ begin
 end;
 $$;
 
-create or replace function public.current_profile_id()
-returns uuid
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select id from public.profiles where user_id = auth.uid()
-$$;
-
-create or replace function public.current_user_role()
-returns public.user_role
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select role from public.profiles where user_id = auth.uid()
-$$;
-
-create or replace function public.is_admin()
-returns boolean
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select public.current_user_role() in ('ADMIN', 'SUPER_ADMIN')
-$$;
+-- Profile helper functions are created after public.profiles exists.
 
 -- ---------------------------------------------------------------------------
 -- Tables
@@ -427,6 +399,36 @@ create table public.audit_logs (
   created_at timestamptz not null default now()
 );
 
+create or replace function public.current_profile_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select id from public.profiles where user_id = auth.uid()
+$$;
+
+create or replace function public.current_user_role()
+returns public.user_role
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select role from public.profiles where user_id = auth.uid()
+$$;
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select public.current_user_role() in ('ADMIN', 'SUPER_ADMIN')
+$$;
+
 -- ---------------------------------------------------------------------------
 -- Indexes
 -- ---------------------------------------------------------------------------
@@ -496,8 +498,18 @@ begin
     new.id,
     coalesce(new.email, ''),
     'CUSTOMER',
-    coalesce(new.raw_user_meta_data ->> 'first_name', ''),
-    coalesce(new.raw_user_meta_data ->> 'last_name', ''),
+    coalesce(
+      new.raw_user_meta_data ->> 'first_name',
+      new.raw_user_meta_data ->> 'given_name',
+      split_part(coalesce(new.raw_user_meta_data ->> 'name', new.raw_user_meta_data ->> 'full_name', ''), ' ', 1),
+      ''
+    ),
+    coalesce(
+      new.raw_user_meta_data ->> 'last_name',
+      new.raw_user_meta_data ->> 'family_name',
+      nullif(split_part(coalesce(new.raw_user_meta_data ->> 'name', new.raw_user_meta_data ->> 'full_name', ''), ' ', 2), ''),
+      ''
+    ),
     new.raw_user_meta_data ->> 'phone'
   );
   return new;

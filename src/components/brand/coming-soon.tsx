@@ -1,5 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-
 type ComingSoonProps = {
   title: string;
   description: string;
@@ -7,10 +5,12 @@ type ComingSoonProps = {
 
 export function ComingSoon({ title, description }: ComingSoonProps) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
-      <Badge variant="outline">Coming soon</Badge>
-      <h2 className="mt-3 text-lg font-semibold tracking-tight">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+    <div className="rounded-3xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-white p-5">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-orange-600">
+        Coming soon
+      </p>
+      <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-950">{title}</h2>
+      <p className="mt-2 font-bold leading-6 text-slate-700">{description}</p>
     </div>
   );
 }

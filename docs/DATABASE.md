@@ -15,9 +15,9 @@ Tax is stored as **basis points** on `tax_settings.rate_bps` (1300 = 13%).
 Generic names so future services do not need new “snow_*” tables.
 
 - `profiles` — one per `auth.users`. Public signup inserts `CUSTOMER`.
-- `properties` / `property_zones` / `property_photos`
+- `properties` / `property_zones` / `property_photos` (`DRIVEWAY`, `DRIVEWAY_FINISHED` plus the original types). Properties also store `roof_type`, `roof_notes`, `salt_puck_count`, `firewood_preferences`, `firewood_stack_location`, and `firewood_notes`.
 - `services` — catalog (`SNOW`, `FIREWOOD`, `FUTURE`)
-- `service_requests` → `jobs` → `job_photos` / `job_materials`
+- `service_requests` → `jobs` → `job_photos` / `job_materials`. Customers request visits. Admin approves, then dispatches a job and assigns crew. Crew proof lives on `job_photos` (`BEFORE` / `AFTER`).
 - `contracts`, `invoices`, `payments`
 - `firewood_products`, `firewood_orders`, `firewood_order_items`
 - `storm_events`
@@ -39,7 +39,7 @@ where email = 'owner@example.com';
 
 ## Seed
 
-The migration seeds settings, Ontario HST, and three snow service catalog rows with `base_price = 0` (`CUSTOM_QUOTE` / seasonal / per-event). It does **not** invent customers, jobs, or inventory.
+The foundation migration seeds settings, Ontario HST, and three snow service catalog rows with `base_price = 0`. `0004_roof_pucks_and_firewood.sql` adds roof/firewood property fields, a Roof Salt Pucks service, and a real firewood product list. It does **not** invent customers, jobs, or paid orders.
 
 ## Storage
 

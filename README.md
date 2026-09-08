@@ -2,7 +2,7 @@
 
 Property-service operations for residential and commercial snow removal, plus firewood sales. The durable record is the **property**.
 
-Consumer brand: **SnowFire Online**.
+Consumer brand: **SnowFire.ca**.
 
 ## Status
 
@@ -13,7 +13,7 @@ Phase 1 — Foundation is in progress:
 - Supabase schema + RLS SQL
 - Auth wired when environment variables are present
 
-Properties, booking, crew jobs, photos, Stripe, and firewood checkout are **not built yet**. Those screens are labeled Coming soon.
+Customer properties, roof salt pucks, weather, the firewood yard, snow visit requests, unpaid wood requests, and crew jobs (dispatch → proof) are live. Stripe is **not built yet**.
 
 ## Local run
 

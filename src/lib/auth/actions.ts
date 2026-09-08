@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { isSupabaseConfigured } from "@/lib/env";
+import { getSiteUrl, isSupabaseConfigured } from "@/lib/env";
 import { homePathForRole, isUserRole } from "@/lib/roles";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
@@ -55,6 +55,13 @@ export async function signInAction(
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
 
   if (error) {
+    if (error.message.toLowerCase().includes("email not confirmed")) {
+      return {
+        error:
+          "Confirm your email first. Open the message from Supabase and use that link, then sign in.",
+      };
+    }
+
     return { error: "Email or password is incorrect." };
   }
 
@@ -103,13 +110,11 @@ export async function signUpAction(
     return configurationError();
   }
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
-      emailRedirectTo: `${origin}/auth/callback`,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       data: {
         first_name: parsed.data.firstName,
         last_name: parsed.data.lastName,
@@ -129,6 +134,43 @@ export async function signUpAction(
   }
 
   redirect("/customer");
+}
+
+export async function signInWithOAuthAction(
+  provider: "google" | "apple",
+): Promise<AuthState> {
+  if (!isSupabaseConfigured()) {
+    return configurationError();
+  }
+
+  const supabase = await createServerSupabaseClient();
+
+  if (!supabase) {
+    return configurationError();
+  }
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${getSiteUrl()}/auth/callback`,
+    },
+  });
+
+  if (error || !data.url) {
+    const message = error?.message ?? "";
+    if (message.toLowerCase().includes("provider is not enabled")) {
+      return {
+        error:
+          "That sign-in method is not enabled yet. Use email and password, or turn on the provider in Supabase.",
+      };
+    }
+
+    return {
+      error: "Unable to start Google or Apple sign-in right now. Please try again.",
+    };
+  }
+
+  redirect(data.url);
 }
 
 export async function signOutAction() {

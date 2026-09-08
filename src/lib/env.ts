@@ -18,3 +18,25 @@ export function getPublicSupabaseConfig(): { url: string; anonKey: string } | nu
 export function getServiceRoleKey(): string | null {
   return process.env.SUPABASE_SERVICE_ROLE_KEY ?? null;
 }
+
+// Auth redirects and link previews both build absolute URLs, and they have to
+// agree. Disagreeing is quiet and nasty: a sign-in that lands on the wrong host
+// drops the session, and a preview image 404s only when someone shares a link.
+// Trailing slashes are stripped here so callers can concatenate a path safely.
+export function getSiteUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+  return (configured || "http://localhost:3000").replace(/\/+$/, "");
+}
+
+export function isGoogleAuthEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_AUTH_GOOGLE === "true";
+}
+
+export function isAppleAuthEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_AUTH_APPLE === "true";
+}
+
+export function getMapsApiKey(): string | null {
+  return process.env.MAPS_API_KEY || process.env.NEXT_PUBLIC_MAPS_API_KEY || null;
+}

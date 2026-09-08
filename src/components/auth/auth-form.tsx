@@ -3,10 +3,13 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { signInAction, signUpAction, type AuthState } from "@/lib/auth/actions";
+import { OAuthButtons } from "@/components/auth/oauth-buttons";
+import { isAppleAuthEnabled, isGoogleAuthEnabled } from "@/lib/env";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 const initialState: AuthState = {};
 
@@ -26,10 +29,27 @@ export function AuthForm({ mode, configured }: AuthFormProps) {
           <AlertTitle>Supabase is not configured</AlertTitle>
           <AlertDescription>
             Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to
-            .env.local, then run the foundation migration. Sign-in will not work
-            until that is done.
+            .env.local, then run the foundation migration. Email, Google, and
+            Apple sign-in will not work until that is done.
           </AlertDescription>
         </Alert>
+      ) : null}
+
+      {isGoogleAuthEnabled() || isAppleAuthEnabled() ? (
+        <>
+          <OAuthButtons
+            configured={configured}
+            google={isGoogleAuthEnabled()}
+            apple={isAppleAuthEnabled()}
+          />
+          <div className="flex items-center gap-3">
+            <Separator className="flex-1" />
+            <span className="text-xs font-medium tracking-wide text-muted-foreground">
+              OR
+            </span>
+            <Separator className="flex-1" />
+          </div>
+        </>
       ) : null}
 
       {mode === "signup" ? (
@@ -110,6 +130,7 @@ export function AuthForm({ mode, configured }: AuthFormProps) {
 
       <Button
         type="submit"
+        variant={mode === "signup" ? "success" : "default"}
         disabled={!configured || pending}
         className="h-12 w-full text-base"
       >
