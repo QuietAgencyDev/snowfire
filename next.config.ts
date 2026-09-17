@@ -9,6 +9,20 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4.5mb",
     },
   },
+
+  // One address is canonical, and it is the bare one. Serving both would split
+  // sessions across hosts and hand search engines two copies of every page,
+  // while metadataBase already advertises the apex.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.snowfire.ca" }],
+        destination: "https://snowfire.ca/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
