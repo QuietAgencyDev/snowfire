@@ -26,7 +26,20 @@ export function getServiceRoleKey(): string | null {
 export function getSiteUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
-  return (configured || "http://localhost:3000").replace(/\/+$/, "");
+  if (configured) {
+    return configured.replace(/\/+$/, "");
+  }
+
+  // Only production pins a host, so without this every preview deployment would
+  // claim to live on localhost and hand out sign-in links that go nowhere.
+  // Vercel sets this per deployment, and it never carries a scheme.
+  const deployment = process.env.VERCEL_URL?.trim();
+
+  if (deployment) {
+    return `https://${deployment}`.replace(/\/+$/, "");
+  }
+
+  return "http://localhost:3000";
 }
 
 export function isGoogleAuthEnabled(): boolean {

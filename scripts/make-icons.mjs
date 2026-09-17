@@ -32,6 +32,12 @@ const icons = [
 const FAVICON = "src/app/favicon.ico";
 const FAVICON_SIZES = [16, 32, 48, 64];
 
+// The card every chat app and search preview draws. Next picks this up from the
+// app directory by filename and writes the tags itself, so the size below is the
+// one the crawlers are told about. 1200x630 is the ratio they all crop toward.
+const SOCIAL = "src/app/opengraph-image.png";
+const SOCIAL_SIZE = { width: 1200, height: 630 };
+
 const head = await sharp(SOURCE).extract(HEAD).toBuffer();
 
 async function square(size, inset) {
@@ -95,4 +101,33 @@ await writeFile(FAVICON, ico);
 
 console.log(
   `${FAVICON} · ${FAVICON_SIZES.join("/")} · ${(ico.length / 1024).toFixed(0)} KB`,
+);
+
+// The full logo already carries the name under the king, so the card is just
+// that, centred and given room to breathe. Setting the lettering beside him as
+// well printed it twice.
+const { width: cardWidth, height: cardHeight } = SOCIAL_SIZE;
+const margin = Math.round(cardHeight * 0.08);
+const logo = await sharp(SOURCE)
+  .resize({
+    width: cardWidth - margin * 2,
+    height: cardHeight - margin * 2,
+    fit: "inside",
+  })
+  .toBuffer();
+
+const card = await sharp({
+  create: {
+    width: cardWidth,
+    height: cardHeight,
+    channels: 4,
+    background: BACKGROUND,
+  },
+})
+  .composite([{ input: logo, gravity: "center" }])
+  .png({ compressionLevel: 9, palette: true })
+  .toFile(SOCIAL);
+
+console.log(
+  `${SOCIAL} · ${card.width}x${card.height} · ${(card.size / 1024).toFixed(0)} KB`,
 );

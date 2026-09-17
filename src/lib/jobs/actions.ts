@@ -18,6 +18,7 @@ import {
   extensionForImageType,
   isAllowedImageFile,
   jobPhotoPath,
+  MAX_PROPERTY_PHOTO_LABEL,
   PROPERTY_MEDIA_BUCKET,
 } from "@/lib/photos/paths";
 import { isAdminRole } from "@/lib/roles";
@@ -343,7 +344,7 @@ export async function uploadJobPhotoAction(
   }
 
   if (!isAllowedImageFile(file)) {
-    return { error: "Use a JPEG, PNG, or WebP photo under 6 MB." };
+    return { error: `Use a JPEG, PNG, or WebP photo under ${MAX_PROPERTY_PHOTO_LABEL}.` };
   }
 
   const extension = extensionForImageType(file.type);

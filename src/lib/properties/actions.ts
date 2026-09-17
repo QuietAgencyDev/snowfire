@@ -7,6 +7,7 @@ import { geocodeAddress } from "@/lib/maps/geocode";
 import {
   extensionForImageType,
   isAllowedImageFile,
+  MAX_PROPERTY_PHOTO_LABEL,
   PROPERTY_MEDIA_BUCKET,
   propertyPhotoPath,
 } from "@/lib/photos/paths";
@@ -244,7 +245,7 @@ export async function uploadPropertyPhotoAction(
 
   if (!isAllowedImageFile(file)) {
     return {
-      error: "Use a JPEG, PNG, or WebP photo under 6 MB.",
+      error: `Use a JPEG, PNG, or WebP photo under ${MAX_PROPERTY_PHOTO_LABEL}.`,
     };
   }
 
