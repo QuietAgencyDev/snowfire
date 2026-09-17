@@ -102,7 +102,17 @@ export function AuthForm({ mode, configured }: AuthFormProps) {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="password">Password</Label>
+        <div className="flex items-center justify-between gap-2">
+          <Label htmlFor="password">Password</Label>
+          {mode === "login" ? (
+            <Link
+              href="/forgot-password"
+              className="text-sm text-muted-foreground underline"
+            >
+              Forgot password?
+            </Link>
+          ) : null}
+        </div>
         <Input
           id="password"
           name="password"

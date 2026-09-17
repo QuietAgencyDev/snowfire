@@ -11,7 +11,7 @@
     "lettering": "node scripts/make-lettering.mjs",
     "icons": "node scripts/make-icons.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/lib/roles.test.ts src/lib/money.test.ts src/lib/properties/address.test.ts src/lib/properties/service-options.test.ts src/lib/properties/readiness.test.ts src/lib/firewood/cords.test.ts src/lib/firewood/readiness.test.ts src/lib/firewood/options.test.ts src/lib/pricing/quote-math.test.ts src/lib/pricing/rate-card.test.ts src/lib/contracts/terms.test.ts src/lib/jobs/transitions.test.ts src/lib/maps/urls.test.ts src/lib/weather/codes.test.ts src/lib/weather/ice-risk.test.ts src/lib/photos/paths.test.ts src/lib/notifications/href.test.ts src/lib/storms/priority.test.ts src/lib/navigation/links.test.ts"
+    "test": "node --experimental-strip-types --test src/lib/auth/safe-path.test.ts src/lib/roles.test.ts src/lib/money.test.ts src/lib/properties/address.test.ts src/lib/properties/service-options.test.ts src/lib/properties/readiness.test.ts src/lib/firewood/cords.test.ts src/lib/firewood/readiness.test.ts src/lib/firewood/options.test.ts src/lib/pricing/quote-math.test.ts src/lib/pricing/rate-card.test.ts src/lib/contracts/terms.test.ts src/lib/jobs/transitions.test.ts src/lib/maps/urls.test.ts src/lib/weather/codes.test.ts src/lib/weather/ice-risk.test.ts src/lib/photos/paths.test.ts src/lib/notifications/href.test.ts src/lib/storms/priority.test.ts src/lib/navigation/links.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

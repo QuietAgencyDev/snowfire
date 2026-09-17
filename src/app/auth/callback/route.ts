@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { internalPath } from "@/lib/auth/safe-path";
 import { homePathForRole, isUserRole } from "@/lib/roles";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const next = internalPath(searchParams.get("next"));
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login`);
@@ -37,7 +39,8 @@ export async function GET(request: Request) {
     .maybeSingle();
 
   const destination =
-    profile && isUserRole(profile.role) ? homePathForRole(profile.role) : "/customer";
+    next ??
+    (profile && isUserRole(profile.role) ? homePathForRole(profile.role) : "/customer");
 
   return NextResponse.redirect(`${origin}${destination}`);
 }
