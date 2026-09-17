@@ -7,6 +7,7 @@ import {
   type PropertyFormState,
 } from "@/lib/properties/actions";
 import type { PhotoType, PropertyPhotoView } from "@/types/database";
+import { usePhotoShrink } from "@/components/photos/use-photo-shrink";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,7 @@ export function DrivewayPhotos({
   description,
 }: DrivewayPhotosProps) {
   const [state, formAction, pending] = useActionState(uploadPropertyPhotoAction, initialState);
+  const photo = usePhotoShrink();
 
   return (
     <section className="rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-5">
@@ -87,8 +89,12 @@ export function DrivewayPhotos({
               type="file"
               accept="image/jpeg,image/png,image/webp"
               required
+              onChange={photo.onChange}
               className="h-12 border-2 border-indigo-100"
             />
+            {photo.note ? (
+              <p className="text-xs font-semibold text-indigo-800">{photo.note}</p>
+            ) : null}
           </div>
           <div className="grid gap-2">
             <Label htmlFor={`${photoType}-caption`} className="font-black">
@@ -115,10 +121,10 @@ export function DrivewayPhotos({
           ) : null}
           <Button
             type="submit"
-            disabled={pending}
+            disabled={pending || photo.preparing}
             className="h-12 w-fit bg-indigo-600 px-5 font-black text-white hover:bg-indigo-700"
           >
-            {pending ? "Uploading…" : "Upload photo"}
+            {photo.preparing ? "Preparing…" : pending ? "Uploading…" : "Upload photo"}
           </Button>
         </form>
       </div>

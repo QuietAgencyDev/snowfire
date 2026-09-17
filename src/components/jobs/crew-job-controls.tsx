@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { advanceJobAction, uploadJobPhotoAction, type JobFormState } from "@/lib/jobs/actions";
 import { nextCrewAction, type JobStatus } from "@/lib/jobs/transitions";
+import { usePhotoShrink } from "@/components/photos/use-photo-shrink";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const initialState: JobFormState = {};
@@ -24,6 +25,7 @@ export function CrewJobControls({
 }: CrewJobControlsProps) {
   const [moveState, moveAction, movePending] = useActionState(advanceJobAction, initialState);
   const [photoState, photoAction, photoPending] = useActionState(uploadJobPhotoAction, initialState);
+  const photo = usePhotoShrink();
   const next = nextCrewAction(status);
   const needBefore = status === "ARRIVED" && beforeCount === 0;
   const needAfter = status === "IN_PROGRESS" && afterCount === 0;
@@ -47,8 +49,12 @@ export function CrewJobControls({
             type="file"
             accept="image/jpeg,image/png,image/webp"
             required
+            onChange={photo.onChange}
             className="font-bold"
           />
+          {photo.note ? (
+            <p className="font-bold text-violet-900">{photo.note}</p>
+          ) : null}
           {photoState.error ? (
             <Alert variant="destructive">
               <AlertTitle className="font-black">Photo did not save</AlertTitle>
@@ -60,10 +66,14 @@ export function CrewJobControls({
           ) : null}
           <button
             type="submit"
-            disabled={photoPending}
+            disabled={photoPending || photo.preparing}
             className="inline-flex h-16 items-center justify-center rounded-2xl bg-violet-700 px-5 text-xl font-black text-white disabled:opacity-50"
           >
-            {photoPending ? "Uploading…" : `Save ${photoType} photo`}
+            {photo.preparing
+              ? "Preparing…"
+              : photoPending
+                ? "Uploading…"
+                : `Save ${photoType} photo`}
           </button>
         </form>
       ) : null}
