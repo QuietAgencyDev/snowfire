@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand/brand-logo";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +68,7 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

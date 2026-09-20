@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthForm } from "@/components/auth/auth-form";
+import { LegalNote } from "@/components/auth/legal-note";
 import { BrandLogo } from "@/components/brand/brand-logo";
 import { isSupabaseConfigured } from "@/lib/env";
 
@@ -24,6 +25,7 @@ export default function LoginPage() {
           <div className="mt-6">
             <AuthForm mode="login" configured={isSupabaseConfigured()} />
           </div>
+          <LegalNote />
         </div>
       </div>
     </div>
