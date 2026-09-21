@@ -9,10 +9,10 @@
 // point of publishing one.
 export const BUSINESS = {
   name: "SnowFire.ca",
-  contactEmail: "slabcentraltv@gmail.com",
+  contactEmail: "quietaskeptdev@gmail.com",
   region: "Ontario, Canada",
   serviceArea: "the Barrie and Greater Toronto area",
 } as const;
 
 // Shown to readers so they can tell whether they are looking at current terms.
-export const LEGAL_UPDATED = "September 20, 2026";
+export const LEGAL_UPDATED = "September 21, 2026";
